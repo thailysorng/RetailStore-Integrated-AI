@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import api from "../lib/api";
 
@@ -36,9 +37,10 @@ function Products() {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
-            <div
+            <Link
               key={product._id}
-              className="rounded-lg border bg-white p-5 shadow-sm"
+              to={`/products/${product._id}`}
+              className="rounded-lg border bg-white p-5 shadow-sm transition hover:shadow-md"
             >
               <h2 className="text-xl font-semibold">{product.name}</h2>
 
@@ -53,7 +55,7 @@ function Products() {
               <p className="mt-1 text-sm text-gray-500">
                 Stock: {product.stock}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       )}
