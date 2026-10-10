@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import api from "../lib/api";
+import useCartStore from "../store/cartStore";
 
 function ProductDetail() {
   const { id } = useParams();
+  const addToCart = useCartStore((state) => state.addToCart);
 
   const {
     data: product,
@@ -29,10 +31,7 @@ function ProductDetail() {
           Failed to load product: {error.message}
         </p>
 
-        <Link
-          to="/products"
-          className="mt-4 inline-block underline"
-        >
+        <Link to="/products" className="mt-4 inline-block underline">
           Back to Products
         </Link>
       </div>
@@ -62,6 +61,15 @@ function ProductDetail() {
         <p className="mt-2 text-gray-500">
           Stock: {product.stock}
         </p>
+
+        <button
+          type="button"
+          onClick={() => addToCart(product)}
+          disabled={product.stock <= 0}
+          className="mt-6 rounded-md bg-black px-6 py-3 text-white hover:bg-gray-800 disabled:cursor-not-allowed disabled:bg-gray-400"
+        >
+          {product.stock <= 0 ? "Out of Stock" : "Add to Cart"}
+        </button>
       </div>
     </main>
   );
