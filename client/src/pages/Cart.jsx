@@ -1,10 +1,14 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import useCartStore from "../store/cartStore";
+import CheckoutModal from "@/components/checkout/CheckoutModal";
 
 function Cart() {
   const items = useCartStore((state) => state.items);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
+
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   const total = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -35,7 +39,6 @@ function Cart() {
             >
               <div>
                 <h2 className="text-lg font-semibold">{item.name}</h2>
-
                 <p className="mt-1 text-gray-600">
                   ${item.price} each
                 </p>
@@ -88,14 +91,19 @@ function Cart() {
 
             <button
               type="button"
-              disabled
-              className="mt-4 cursor-not-allowed rounded-md bg-gray-400 px-6 py-3 text-white"
+              onClick={() => setIsCheckoutOpen(true)}
+              className="mt-4 rounded-md bg-black px-6 py-3 text-white transition hover:bg-gray-800"
             >
-              Checkout (Coming Soon)
+              Checkout
             </button>
           </div>
         </div>
       )}
+
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+      />
     </main>
   );
 }
